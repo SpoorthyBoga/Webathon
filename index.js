@@ -293,31 +293,72 @@ async function main() {
 
   const Event = eventDB.model("Event", require("./models/Event").schema);
   const Student = studentDB.model("Student", require("./models/student").schema);
+  const Faculty = studentDB.model("Faculty", require("./models/faculty").schema);
+  const Management = studentDB.model("Management", require("./models/management").schema);
+  const Organiser = studentDB.model("Organiser", require("./models/organiser").schema);
 
   global.EventModel = Event;
   global.StudentModel = Student;
+  global.FacultyModel=Faculty;
+  global.ManagementModel=Management;
+  global.OrganiserModel=Organiser;
 
   console.log("✅ All databases connected!");
 }
 main().catch((err) => console.error(err));
 
 // Routes
-app.get("/landing", (req, res) => res.render("landing.ejs"));
 
 app.get("/login", (req, res) => res.render("login.ejs"));
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const { email, password, dashboard } = req.body;
-  if (!dashboard) return res.status(400).send("Please select a dashboard.");
 
-  const redirectMap = {
-    s_dashboard: "/s_dashboard",
-    f_dashboard: "/f_dashboard",
-    e_dashboard: "/e_dashboard",
-    m_dashboard: "/m_dashboard",
-  };
-  return res.redirect(redirectMap[dashboard] || "/login");
+  if (!dashboard) {
+    return res.status(400).send("Please select a dashboard.");
+  }
+
+  let user;
+  let redirectPath = "/login";
+
+  try {
+    console.log(dashboard);
+    switch (dashboard) {
+      case "Student":
+        user = await global.StudentModel.findOne({ email });
+        redirectPath = "/s_dashboard";
+        break;
+      case "Faculty":
+        user = await global.FacultyModel.findOne({ email });
+        redirectPath = "/f_dashboard";
+        break;
+      case "Organizer":
+        user = await global.OrganiserModel.findOne({ email });
+        redirectPath = "/e_dashboard";
+        break;
+      case "Management":
+        user = await global.ManagementModel.findOne({ email });
+        redirectPath = "/m_dashboard";
+        break;
+      default:
+        return res.status(400).send("Invalid dashboard selected.");
+    }
+
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+
+    if (user.password !== password) {
+      return res.status(401).send("Wrong password!");
+    }
+
+    return res.redirect(redirectPath);
+  } catch (error) {
+    console.error("Login error:", error);
+    return res.status(500).send("Internal Server Error");
+  }
 });
+
 
 // app.get("/e_dashboard", (req, res) => res.render("e_dashboard.ejs"));
 // app.get("/m_dashboard", (req, res) => res.render("m_dashboard.ejs"));
@@ -354,7 +395,7 @@ async function renderEventDashboard(req, res, viewName) {
     res.status(500).send("Error loading events");
   }
 }
-
+app.get("/landing", (req, res) => renderEventDashboard(req, res, "landing.ejs"));
 app.get("/s_dashboard", (req, res) => renderEventDashboard(req, res, "s_dashboard.ejs"));
 app.get("/f_dashboard", (req, res) => renderEventDashboard(req, res, "f_dashboard.ejs"));
 app.get("/e_dashboard", (req, res) => renderEventDashboard(req, res, "e_dashboard.ejs"));

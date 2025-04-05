@@ -30,39 +30,60 @@
       <a href="/login" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-6 rounded-lg">Sign In</a>
     </section>
 
-    <!-- Ongoing Events -->
-    <h3 class="text-2xl font-bold mb-4">Ongoing Events</h3>
-    <div class="tab-pane fade show active" id="ongoing" role="tabpanel">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <% ongoingEvents.forEach(event => { %>
-                <div class="bg-white rounded-lg shadow-md p-4 event-card">
-                    <h3 class="text-xl font-semibold text-blue-700"><%= event.title %></h3>
-                    <p class="text-gray-600"><%= event.date %> | <%= event.time %></p>
-                    <p class="text-gray-700">Venue: <%= event.venue %></p>
-                    <button class="btn btn-primary mt-2">View Details</button>
-                </div>
-            <% }) %>
-        </div>
-    </div>
-
+          <!-- Ongoing -->
+          <section>
+            <h1 class="text-2xl font-bold text-rose-600">Ongoing Events</h1>
+            <br>
+            <div class="tab-pane fade show active" id="ongoing" role="tabpanel">
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <% if (ongoingEvents.length === 0) { %>
+                  <p class="text-center text-gray-500 col-span-3">No ongoing events.</p>
+                <% } %>
+                <% ongoingEvents.forEach(event => { %>
+                  <a href="/events/<%= event._id %>" class="no-underline text-inherit">
+                    <div class="bg-white rounded-lg shadow-md p-4 event-card border border-red-200">
+                      <% if (event.images && event.images.length > 0) { %>
+                        <img src="<%= event.images[0] %>" alt="Event Image" class="w-full h-40 object-cover rounded mb-3">
+                      <% } %>
+                      <h3 class="text-xl font-semibold text-red-700"><%= event.title %></h3>
+                      <p class="text-gray-600"><%= event.date %> | <%= event.time %></p>
+                      <p class="text-gray-700">Venue: <%= event.venue %></p>
+                      <button class="btn btn-danger mt-2">View Details</button>
+                    </div>
+                  </a>
+                <% }) %>
+              </div>
+            </div>
+          </section>
+         <br>
+         
     
-    <!-- Upcoming Events -->
-    <section class="mb-12">
-      <h3 class="text-2xl font-bold mb-4">Upcoming Events</h3>
-      <div class="tab-pane fade" id="upcoming" role="tabpanel">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <% upcomingEvents.forEach(event => { %>
-                <div class="bg-white rounded-lg shadow-md p-4 event-card">
-                    <h3 class="text-xl font-semibold text-blue-700"><%= event.title %></h3>
-                    <p class="text-gray-600"><%= event.date %> | <%= event.time %></p>
-                    <p class="text-gray-700">Venue: <%= event.venue %></p>
-                    <button class="btn btn-success mt-2" >Register</button>
-                </div>
-            <% }) %>
-        </div>
-    </div>
-
-    </section>
+          <!-- Upcoming -->
+           <section>
+            <h1 class="text-2xl font-bold text-rose-600">Upcoming Events</h1>
+            <br>
+            <div class="tab-pane fade" id="upcoming" role="tabpanel">
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <% if (upcomingEvents.length === 0) { %>
+                  <p class="text-center text-gray-500 col-span-3">No upcoming events.</p>
+                <% } %>
+                <% upcomingEvents.forEach(event => { %>
+                  <a href="/events/<%= event._id %>" class="no-underline text-inherit">
+                    <div class="bg-white rounded-lg shadow-md p-4 event-card border border-red-200">
+                      <% if (event.images && event.images.length > 0) { %>
+                        <img src="<%= event.images[0] %>" alt="Event Image" class="w-full h-40 object-cover rounded mb-3">
+                      <% } %>
+                      <h3 class="text-xl font-semibold text-red-700"><%= event.title %></h3>
+                      <p class="text-gray-600"><%= event.date %> | <%= event.time %></p>
+                      <p class="text-gray-700">Venue: <%= event.venue %></p>
+                      <button class="btn btn-outline-danger mt-2">Register</button>
+                    </div>
+                  </a>
+                <% }) %>
+              </div>
+            </div>
+           </section>
+          
   </main>
 
   <!-- Footer -->
