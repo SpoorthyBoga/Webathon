@@ -5,33 +5,27 @@ const mongoose = require("mongoose");
 const port=8080;
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'))
+// mongoose
+//   .connect(process.env.MONGODB_URL)
+//   .then(() => console.log("Connected to MongoDB"))
+//   .catch((err) => console.error("MongoDB connection error:", err))
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://spoorthy0410:Cherry%40123@cluster0.rvd1sej.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+async function main() {
+  const studentDB = mongoose.createConnection('mongodb://127.0.0.1:27017/User');
+  const eventDB = mongoose.createConnection('mongodb://127.0.0.1:27017/event');
 
+  // Use `.model(name, schema)` with `.schema`
+  const Event = eventDB.model('Event', require('./models/Event').schema);
+  const Student = studentDB.model('Student', require('./models/student').schema);
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
+  global.EventModel = Event; // Make accessible globally if needed
+  global.StudentModel = Student;
 
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
+  console.log("✅ All databases connected!");
 }
-run().catch(console.dir);
+
+main().catch(err => console.error(err));
+
 
 
 app.set("view engine", "ejs" );
@@ -79,11 +73,12 @@ const eventsData = {
   
 
 app.listen(port, ()=>{
-    console.log(`listening to ${port}`);
+  console.log(`listening to ${port}`);
+
 });
 
-app.get("/", (req,res)=>{
-    res.render("landing.ejs")
+app.get("/landing", (req,res)=>{
+    res.render("landing.ejs", eventsData)
 });
 
 app.get("/login", (req,res)=>{
@@ -93,14 +88,9 @@ app.get("/login", (req,res)=>{
 
 app.post("/login", (req, res) => {
     const { email, password, dashboard } = req.body;
-
-    // TODO: Authenticate user (e.g., check MongoDB for email/password)
-    // For now, we'll just simulate successful login
-
     if (!dashboard) {
         return res.status(400).send("Please select a dashboard.");
     }
-
     // Redirect based on dashboard selection
     switch (dashboard) {
         case "s_dashboard":
@@ -116,28 +106,164 @@ app.post("/login", (req, res) => {
     }
 });
 
-    
+app.get("/e_dashboard", (req,res)=> res.render("e_dashboard.ejs", studentDashboardData))
+
+app.get("/m_dashboard", (req,res)=> res.render("m_dashboard.ejs",studentDashboardData));
+
+app.get('/s_dashboard', async (req, res) => {
+  try {
+    const allEvents = await global.EventModel.find();
+    const today = moment().startOf('day');
+
+    console.log("Today is:", today.format('YYYY-MM-DD'));
+    console.log("All events:", allEvents.map(e => ({ title: e.title, rawDate: e.date })));
+
+    const ongoingEvents = [];
+    const upcomingEvents = [];
+
+    allEvents.forEach(event => {
+      // Try parsing event.date using known formats
+      const parsedDate = moment(event.date, [
+        'YYYY-MM-DD',
+        'YYYY/MM/DD',
+        'DD-MM-YYYY',
+        'MM-DD-YYYY',
+        'MMMM D, YYYY',
+        'MMM D, YYYY',
+        'D MMMM YYYY'
+      ], true); // strict mode
+
+      if (!parsedDate.isValid()) {
+        console.warn(`⚠️ Invalid date for event: ${event.title} — raw value: "${event.date}"`);
+        return;
+      }
+
+      console.log(`📅 ${event.title} — parsed date: ${parsedDate.format('YYYY-MM-DD')}`);
+
+      if (parsedDate.isSame(today, 'day')) {
+        ongoingEvents.push(event); // full object
+      } else if (parsedDate.isAfter(today, 'day')) {
+        upcomingEvents.push(event); // full object
+      }
+    });
+
+    console.log("✅ Ongoing Events:", ongoingEvents.map(e => e.title));
+    console.log("✅ Upcoming Events:", upcomingEvents.map(e => e.title));
+
+    // Pass full event objects to EJS
+    res.render('s_dashboard.ejs', { ongoingEvents, upcomingEvents });
+
+  } catch (err) {
+    console.error("🚨 Error in /events route:", err);
+    res.status(500).send("Error loading events");
+  }});
+app.get('/f_dashboard', async (req, res) => {
+  try {
+    const allEvents = await global.EventModel.find();
+    const today = moment().startOf('day');
+
+    console.log("Today is:", today.format('YYYY-MM-DD'));
+    console.log("All events:", allEvents.map(e => ({ title: e.title, rawDate: e.date })));
+
+    const ongoingEvents = [];
+    const upcomingEvents = [];
+
+    allEvents.forEach(event => {
+      // Try parsing event.date using known formats
+      const parsedDate = moment(event.date, [
+        'YYYY-MM-DD',
+        'YYYY/MM/DD',
+        'DD-MM-YYYY',
+        'MM-DD-YYYY',
+        'MMMM D, YYYY',
+        'MMM D, YYYY',
+        'D MMMM YYYY'
+      ], true); // strict mode
+
+      if (!parsedDate.isValid()) {
+        console.warn(`⚠️ Invalid date for event: ${event.title} — raw value: "${event.date}"`);
+        return;
+      }
+
+      console.log(`📅 ${event.title} — parsed date: ${parsedDate.format('YYYY-MM-DD')}`);
+
+      if (parsedDate.isSame(today, 'day')) {
+        ongoingEvents.push(event); // full object
+      } else if (parsedDate.isAfter(today, 'day')) {
+        upcomingEvents.push(event); // full object
+      }
+    });
+
+    console.log("✅ Ongoing Events:", ongoingEvents.map(e => e.title));
+    console.log("✅ Upcoming Events:", upcomingEvents.map(e => e.title));
+
+    // Pass full event objects to EJS
+    res.render('f_dashboard.ejs', { ongoingEvents, upcomingEvents });
+
+  } catch (err) {
+    console.error("🚨 Error in /events route:", err);
+    res.status(500).send("Error loading events");
+  }});
+
+// app.get('/events',async (req, res) =>  {
+//   let events= await event.find()
+//   res.render('events.ejs', {events})})
+
+const Event = require('./models/Event'); // Make sure this path is correct
+const moment = require('moment'); // Install moment for date comparison if not already
+
+app.get('/events', async (req, res) => {
+  try {
+    const allEvents = await global.EventModel.find();
+    const today = moment().startOf('day');
+
+    console.log("Today is:", today.format('YYYY-MM-DD'));
+    console.log("All events:", allEvents.map(e => ({ title: e.title, rawDate: e.date })));
+
+    const ongoingEvents = [];
+    const upcomingEvents = [];
+
+    allEvents.forEach(event => {
+      // Try parsing event.date using known formats
+      const parsedDate = moment(event.date, [
+        'YYYY-MM-DD',
+        'YYYY/MM/DD',
+        'DD-MM-YYYY',
+        'MM-DD-YYYY',
+        'MMMM D, YYYY',
+        'MMM D, YYYY',
+        'D MMMM YYYY'
+      ], true); // strict mode
+
+      if (!parsedDate.isValid()) {
+        console.warn(`⚠️ Invalid date for event: ${event.title} — raw value: "${event.date}"`);
+        return;
+      }
+
+      console.log(`📅 ${event.title} — parsed date: ${parsedDate.format('YYYY-MM-DD')}`);
+
+      if (parsedDate.isSame(today, 'day')) {
+        ongoingEvents.push(event); // full object
+      } else if (parsedDate.isAfter(today, 'day')) {
+        upcomingEvents.push(event); // full object
+      }
+    });
+
+    console.log("✅ Ongoing Events:", ongoingEvents.map(e => e.title));
+    console.log("✅ Upcoming Events:", upcomingEvents.map(e => e.title));
+
+    // Pass full event objects to EJS
+    res.render('events.ejs', { ongoingEvents, upcomingEvents });
+
+  } catch (err) {
+    console.error("🚨 Error in /events route:", err);
+    res.status(500).send("Error loading events");
+  }
+});
 
 
-// app.get("/f_dashboard", (req,res)=>{
-//     res.render("f_dashboard.ejs")
-// })
-
-app.get("/e_dashboard", (req,res)=>{
-    res.render("e_dashboard.ejs")
-})
-
-app.get("/m_dashboard", (req,res)=>{
-    res.render("m_dashboard.ejs")
-})
-
-app.get('/s_dashboard', (req, res) => res.render("f_dashboard.ejs", studentDashboardData));
-app.get('/f_dashboard', (req, res) => res.render('f_dashboard', studentDashboardData));
-
-app.get('/events', (req, res) => res.render('events', eventsData));
-// app.get("/signup", (req, res)=>{
-//     res.render("signup.ejs")
-// })
-
-
-
+app.get('/register', (req,res)=> res.render("registration.ejs"));
+app.get('/pendingapprovals', (req,res)=> res.render("pendingapproval.ejs"));
+app.get('/description', (req,res)=> res.render("description.ejs"));
+app.get('/approvalstatus', (req,res)=> res.render("approvalstatus.ejs"));
+app.get('/new_event', (req,res)=> res.render("new_event.ejs"));

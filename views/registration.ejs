@@ -3,9 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
+    <title>Registration</title> <!-- for <%= event.title %> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --app-primary-color: #e11d48;
+            --app-primary-hover: #c01a40;
+
+            --bs-primary: var(--app-primary-color);
+            --bs-primary-rgb: 225, 29, 72;
+            --bs-link-color-rgb: 225, 29, 72;
+            --bs-link-hover-color-rgb: 192, 26, 64;
+        }
+        .btn-primary {
+             --bs-btn-bg: var(--bs-primary);
+            --bs-btn-border-color: var(--bs-primary);
+            --bs-btn-hover-bg: var(--app-primary-hover);
+            --bs-btn-hover-border-color: var(--app-primary-hover);
+            --bs-btn-active-bg: var(--app-primary-hover);
+            --bs-btn-active-border-color: var(--app-primary-hover);
+        }
+        .user-info p { margin-bottom: 0.5rem; }
+    </style>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
-<body>
-    
-</body>
+<body class="bg-white">
+    <header class="p-3 mb-3 border-bottom">
+        <div class="container">
+            <h1 class="h3 text-primary">Event Registration</h1>
+        </div>
+    </header>
+
+    <div class="container mt-4">
+        <div class="bg-light border border-dark rounded p-4 shadow-sm">
+            <div class="user-info mb-4 p-3 bg-white rounded border">
+                <h4 class="text-[#e11d48]">Your Details:</h4>
+                <p><strong>Name:</strong>Student Name</p>
+                <!-- <%= student.name %> -->
+                 <p><strong>Email:</strong>Student Email</p>
+                 <!--  <%= student.email %> -->
+                 <!-- <% if (student.rollno) { %>
+                     <p><strong>Roll Number:</strong> <%= student.rollNumber %></p>
+                 <% } %> -->
+            </div>
+
+            <form id="registrationForm">
+                <input type="hidden" name="studentName" value="StudentName">
+                <!-- <%= student.name %> -->
+                <input type="hidden" name="studentEmail" value="StudentEmail">
+                <!-- <%= student.email %> -->
+                 <!-- <% if (student.rollno) { %> -->
+                    <input type="hidden" name="studentRollNumber" value="StudentRoll">
+                    <!-- <%= student.rollno %> -->
+                 <!-- <% } %> -->
+                <input type="hidden" name="eventId" value="EventId">
+                <!-- <%= event.id %> -->
+                <input type="hidden" name="amount" id="amount" value="FREE">
+                <!-- <%= event.amount %> -->
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required placeholder="Enter your 10-digit phone number">
+                </div>
+<!-- 
+                 <% if (event.amount > 0) { %>
+                    <p>Registration Fee: <strong class="fs-5"><%= event.currency %> <%= (event.amount / 100).toFixed(2) %></strong></p>
+                 <% } else { %>
+                     <p>Registration is free for this event.</p>
+                 <% } %> -->
+
+
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <!-- <% if (event.amount > 0) { %>
+                             Proceed to Payment
+                        <% } else { %>
+                             Register (Free)
+                        <% } %> -->
+                    </button>
+                </div>
+                 <div id="formError" class="text-danger mt-2"></div>
+            </form>
+        </div>
+    </div>
+    <footer class="container py-5 text-center text-muted">
+        &copy; <%= new Date().getFullYear() %> Vconnect
+    </footer>
+    <script>
+        const form = document.getElementById('registrationForm');
+        const formError = document.getElementById('formError');
+        const eventAmount = parseInt(document.getElementById('amount').value, 10); 
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            formError.textContent = '';
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Processing...';
+
+            const formData = new FormData(form);
+            // Add amount explicitly in case it wasn't in FormData (though hidden input should cover it)
+            formData.append('amount', eventAmount);
+            const data = Object.fromEntries(formData.entries());
+
+            console.log("Submitting data:", data);
+
+            // POST to a simplified endpoint or the same one, handling the reduced data
+            fetch('/register/<%= event.id %>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log("Server Response:", result);
+                submitButton.disabled = false; // Re-enable button unless payment modal opens
+                submitButton.textContent = (eventAmount > 0) ? 'Proceed to Payment' : 'Register (Free)';
+
+                if (result.success) {
+                    if (result.freeRegistration) {
+                        alert(result.message || 'Registration Successful!');
+                        window.location.href = '/thank-you'; // Or user dashboard
+                    } else if (result.order_id) {
+                        // --- Initiate Razorpay ---
+                        const options = {
+                            "key": "<%= key_id %>",
+                            "amount": result.amount,
+                            "name": "eventname", // Event Name, <%=  %>
+                            "description": "Registration for Username", //<%= user.name %>
+                            "order_id": result.order_id,
+                            "handler": function (response){
+                                console.log("Payment successful client-side:", response);
+                                alert('Payment Successful! Redirecting...');
+                                window.location.href = '/thank-you';
+                            },
+                            "prefill": {
+                                "name": result.prefill.name,
+                                "email": result.prefill.email,
+                                "contact": result.prefill.contact
+                            },
+                            "notes": result.notes, // Basic notes like userId, eventId
+                            "theme": {
+                                "color": "#e11d48"
+                            },
+                            "modal": {
+                                "ondismiss": function(){
+                                    console.log('Checkout form closed');
+                                    alert('Payment was cancelled.');
+                                    // Button already re-enabled above
+                                }
+                            }
+                        };
+                        const rzp = new Razorpay(options);
+                        rzp.on('payment.failed', function (response){
+                            console.error("Payment failed:", response);
+                            formError.textContent = `Payment Failed: ${response.error.description || 'Unknown error'};`
+                            // Button already re-enabled above
+                        });
+                        rzp.open(); // Open payment modal
+                        // Keep button disabled while modal is potentially open
+                        submitButton.disabled = true;
+
+                    } else {
+                        formError.textContent = 'Registration successful, but failed to initiate payment step.';
+                    }
+                } else {
+                    formError.textContent = result.message || 'Registration failed. Please check your input.';
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting form:', error);
+                formError.textContent = 'An error occurred. Please try again.';
+                submitButton.disabled = false;
+                submitButton.textContent = (eventAmount > 0) ? 'Proceed to Payment' : 'Register (Free)';
+            });
+        });
+    </script>
+    </body>
 </html>

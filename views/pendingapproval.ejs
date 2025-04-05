@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Faculty Event Approvals</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .event-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .btn-approve {
+            background-color: #22c55e;
+            color: white;
+        }
+
+        .btn-deny {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-approve:hover {
+            background-color: #16a34a;
+        }
+
+        .btn-deny:hover {
+            background-color: #dc2626;
+        }
+
+        .event-title {
+            color: #e11d48;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2 class="mb-4 text-center text-danger">Pending Event Approvals</h2>
+
+        <!-- Event Card -->
+        <div class="event-card">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="event-title mb-0">Tech Workshop 2025</h5>
+                <span class="badge bg-secondary">Workshop</span>
+            </div>
+            <p><strong>Description:</strong> A hands-on workshop on new AI technologies.</p>
+            <p><strong>Mode:</strong> Offline</p>
+            <p><strong>Date:</strong> April 15, 2025 | <strong>Time:</strong> 10:00 AM</p>
+            <p><strong>Duration:</strong> 3 Hours | <strong>Venue:</strong> Room 302, Block A</p>
+            <p><strong>Student Coordinators:</strong> Priya (9876543210), Raj (9123456780)</p>
+
+            <div class="d-flex gap-2">
+                <button class="btn btn-approve">Approve</button>
+                <button class="btn btn-deny">Deny</button>
+            </div>
+        </div>
+
+        <!-- Another event (You can loop through multiple like this) -->
+        <div class="event-card">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="event-title mb-0">Hack The Future</h5>
+                <span class="badge bg-info">Hackathon</span>
+            </div>
+            <p><strong>Description:</strong> 24-Hour hackathon focused on solving social problems.</p>
+            <p><strong>Mode:</strong> Offline</p>
+            <p><strong>Date:</strong> April 20–21, 2025 | <strong>Time:</strong> 9:00 AM onwards</p>
+            <p><strong>Duration:</strong> 2 Days | <strong>Venue:</strong> Auditorium</p>
+            <p><strong>Student Coordinators:</strong> Sneha (9988776655), Arjun (9988123456)</p>
+
+            <div class="d-flex gap-2">
+                <button class="btn btn-approve">Approve</button>
+                <button class="btn btn-deny">Deny</button>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
