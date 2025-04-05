@@ -420,5 +420,50 @@ app.get("/pendingapprovals", (req, res) => res.render("pendingapproval.ejs"));
 app.get("/approvalstatus", (req, res) => res.render("approvalstatus.ejs"));
 app.get("/new_event", (req, res) => res.render("new_event.ejs"));
 
+app.post("/events/new", async (req, res) => {
+  try {
+    const {
+      title,
+      description,
+      date,
+      time,
+      venue,
+      category,
+      amount,
+      capacity,
+      coordinatorName,
+      coordinatorPhone
+    } = req.body;
+
+    // Optional coordinator handling
+    const coordinators = (coordinatorName || []).map((name, i) => ({
+      name,
+      phone: coordinatorPhone[i] || ""
+    }));
+
+    const newEvent = new global.EventModel({
+      title,
+      description,
+      date,
+      time,
+      venue,
+      category,
+      amount,
+      capacity,
+      createdBy: req.user ? req.user._id : null, // Replace this logic as needed
+      approved: false,
+      // images: [], // you can add image upload handling later
+      // coordinators: coordinators, // only if schema supports it
+    });
+
+    await newEvent.save();
+    res.redirect("/e_dashboard");
+  } catch (err) {
+    console.error("Error saving event:", err);
+    res.status(500).send("Something went wrong.");
+  }
+});
+
+
 // Start server
 app.listen(port, () => console.log(`✅ Server listening on port ${port}`));
