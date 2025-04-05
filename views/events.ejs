@@ -65,7 +65,7 @@
             <p class="text-center text-gray-500 col-span-3">No upcoming events.</p>
           <% } %>
           <% upcomingEvents.forEach(event => { %>
-            <a href="/events/<%= event._id %>" class="no-underline text-inherit">
+            <a href="/description/<%= event._id %>" class="no-underline text-inherit">
               <div class="bg-white rounded-lg shadow-md p-4 event-card border border-red-200">
                 <% if (event.images && event.images.length > 0) { %>
                   <img src="<%= event.images[0] %>" alt="Event Image" class="w-full h-40 object-cover rounded mb-3">
