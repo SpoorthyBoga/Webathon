@@ -45,5 +45,53 @@ app.listen(port, ()=>{
 });
 
 app.get("/", (req,res)=>{
-    res.send("Hi, welcome to our homepage!");
+    res.render("landing.ejs")
 });
+
+app.get("/login", (req,res)=>{
+    res.render("login.ejs")
+})
+
+
+    app.post("/login", (req, res) => {
+        const dashboardType = req.body.dashboard;
+    
+        switch (dashboardType) {
+            case "s_dashboard":
+                res.redirect("/s_dashboard");
+                break;
+            case "f_dashboard":
+                res.redirect("/f_dashboard");
+                break;
+            case "e_dashboard":
+                res.redirect("/e_dashboard");
+                break;
+            case "m_dashboard":
+                res.redirect("/m_dashboard");
+                break;
+            default:
+                res.send("Unknown dashboard type!");
+        }
+    });
+    
+
+
+app.get("/f_dashboard", (req,res)=>{
+    res.render("f_dashboard.ejs")
+})
+
+app.get("/e_dashboard", (req,res)=>{
+    res.render("e_dashboard.ejs")
+})
+
+app.get("/m_dashboard", (req,res)=>{
+    res.render("m_dashboard.ejs")
+})
+
+app.get("/s_dashboard", (req,res)=>{
+    res.render("s_dashboard.ejs")
+})
+
+
+
+
