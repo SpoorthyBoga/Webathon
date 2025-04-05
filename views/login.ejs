@@ -1,17 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login page</title>
+  <meta charset="UTF-8">
+  <title>Login | CampusConnect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f1f5f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background: #3b82f6;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .login-container {
+      max-width: 400px;
+      margin: 60px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2563eb;
+      margin-bottom: 30px;
+    }
+
+    form input[type="email"],
+    form input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    form select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    form button {
+      width: 100%;
+      padding: 12px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    form button:hover {
+      background: #2563eb;
+    }
+
+    .note {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .note a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+  </style>
 </head>
 <body>
-    <form action="/login" method="post">
-        <button type="submit" name="dashboard" value="s_dashboard">s_Submit!</button>
-        <button type="submit" name="dashboard" value="f_dashboard">f_Submit!</button>
-        <button type="submit" name="dashboard" value="e_dashboard">e_Submit!</button>
-        <button type="submit" name="dashboard" value="m_dashboard">m_Submit!</button>
+
+
+  <!-- Login Form -->
+  <div class="login-container">
+    <h2>Login to CampusConnect</h2>
+    <form action="/login" method="POST">
+      <input type="email" name="email" placeholder="Email address" required />
+      <input type="password" name="password" placeholder="Password" required />
+
+      <select name="dashboard" required>
+        <option value="">Select your dashboard</option>
+        <option value="s_dashboard">Student</option>
+        <option value="f_dashboard">Faculty</option>
+        <option value="e_dashboard">Event Organizer</option>
+        <option value="m_dashboard">Management</option>
+      </select>
+
+      <button type="submit">Login</button>
     </form>
-    
+
+  </div>
+
 </body>
 </html>

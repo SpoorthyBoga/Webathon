@@ -1,16 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
+  <meta charset="UTF-8">
+  <title>Landing Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .cta-buttons a {
+      display: inline-block;
+      background: white;
+      color: #3b82f6;
+      padding: 12px 24px;
+      border-radius: 8px;
+      margin: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .cta-buttons a:hover {
+      background: #e0e7ff;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin: 40px auto;
+      max-width: 900px;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .card h3 {
+      color: #2563eb;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      padding: 20px;
+      background: #f1f5f9;
+      color: #64748b;
+    }
+  </style>
 </head>
 <body>
-    <form action="/login" method="get">
-        <button >Login</button>
-    </form>
-    <form>
-        <button>Signup</button>
-    </form>
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Welcome to CampusConnect</h1>
+    <p>Your one-stop hub for all student, faculty, and event activities</p>
+    <div class="cta-buttons">
+      <a href="/signup">Get Started</a>
+      <a href="/login">Login</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="card">
+      <h3>Student Dashboard</h3>
+      <p>Track your registrations, explore upcoming events, and manage your profile.</p>
+    </div>
+    <div class="card">
+      <h3>Faculty Tools</h3>
+      <p>Manage student activities, monitor event attendance, and stay updated.</p>
+    </div>
+    <div class="card">
+      <h3>Organizers Panel</h3>
+      <p>Create events, handle registrations, and view real-time analytics.</p>
+    </div>
+    <div class="card">
+      <h3>Admin Access</h3>
+      <p>Oversee the platform, manage users, and access complete control panels.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 CampusConnect. Built with ❤️ for your campus life.
+  </footer>
+
 </body>
 </html>

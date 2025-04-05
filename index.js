@@ -40,6 +40,44 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
+const eventsData = {
+    ongoingEvents: [
+      { title: 'Hackathon 2025', date: 'April 6', time: '9:00 AM', venue: 'Hall A' },
+      { title: 'ML Bootcamp', date: 'April 7', time: '1:00 PM', venue: 'Room 201' }
+    ],
+    upcomingEvents: [
+      { title: 'Cybersecurity 101', date: 'April 15', time: '11:00 AM', venue: 'Auditorium' },
+      { title: 'Design Thinking', date: 'April 18', time: '3:00 PM', venue: 'Lab 3' }
+    ]
+  };
+
+
+  const studentDashboardData = {
+    registeredEvents: [
+      { title: 'Hackathon 2025' },
+      { title: 'Design Thinking' }
+    ],
+    attendedEvents: [
+      { title: 'Webinar on AI' }
+    ],
+    certificates: [
+      { name: 'Intro to AI' }
+    ],
+    badges: [
+      { title: 'Tech Champ' }
+    ],
+
+    ongoingEvents: [
+      { title: 'Hackathon 2025', date: 'April 6', time: '9:00 AM', venue: 'Hall A' },
+      { title: 'ML Bootcamp', date: 'April 7', time: '1:00 PM', venue: 'Room 201' }
+    ],
+    upcomingEvents: [
+      { title: 'Cybersecurity 101', date: 'April 15', time: '11:00 AM', venue: 'Auditorium' },
+      { title: 'Design Thinking', date: 'April 18', time: '3:00 PM', venue: 'Lab 3' }
+    ]
+  };
+  
+
 app.listen(port, ()=>{
     console.log(`listening to ${port}`);
 });
@@ -53,32 +91,37 @@ app.get("/login", (req,res)=>{
 })
 
 
-    app.post("/login", (req, res) => {
-        const dashboardType = req.body.dashboard;
-    
-        switch (dashboardType) {
-            case "s_dashboard":
-                res.redirect("/s_dashboard");
-                break;
-            case "f_dashboard":
-                res.redirect("/f_dashboard");
-                break;
-            case "e_dashboard":
-                res.redirect("/e_dashboard");
-                break;
-            case "m_dashboard":
-                res.redirect("/m_dashboard");
-                break;
-            default:
-                res.send("Unknown dashboard type!");
-        }
-    });
+app.post("/login", (req, res) => {
+    const { email, password, dashboard } = req.body;
+
+    // TODO: Authenticate user (e.g., check MongoDB for email/password)
+    // For now, we'll just simulate successful login
+
+    if (!dashboard) {
+        return res.status(400).send("Please select a dashboard.");
+    }
+
+    // Redirect based on dashboard selection
+    switch (dashboard) {
+        case "s_dashboard":
+            return res.redirect("/s_dashboard");
+        case "f_dashboard":
+            return res.redirect("/f_dashboard");
+        case "e_dashboard":
+            return res.redirect("/e_dashboard");
+        case "m_dashboard":
+            return res.redirect("/m_dashboard");
+        default:
+            return res.status(400).send("Unknown dashboard type!");
+    }
+});
+
     
 
 
-app.get("/f_dashboard", (req,res)=>{
-    res.render("f_dashboard.ejs")
-})
+// app.get("/f_dashboard", (req,res)=>{
+//     res.render("f_dashboard.ejs")
+// })
 
 app.get("/e_dashboard", (req,res)=>{
     res.render("e_dashboard.ejs")
@@ -88,10 +131,13 @@ app.get("/m_dashboard", (req,res)=>{
     res.render("m_dashboard.ejs")
 })
 
-app.get("/s_dashboard", (req,res)=>{
-    res.render("s_dashboard.ejs")
-})
+app.get('/s_dashboard', (req, res) => res.render("f_dashboard.ejs", studentDashboardData));
+app.get('/f_dashboard', (req, res) => res.render('f_dashboard', studentDashboardData));
 
+app.get('/events', (req, res) => res.render('events', eventsData));
+// app.get("/signup", (req, res)=>{
+//     res.render("signup.ejs")
+// })
 
 
 
