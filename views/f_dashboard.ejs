@@ -110,7 +110,7 @@
               <p class="text-center text-gray-500 col-span-3">No ongoing events.</p>
               <% } %>
                 <% ongoingEvents.forEach(event=> { %>
-                  <a href="/events/<%= event._id %>" class="no-underline text-inherit">
+                  <a href="/description/<%= event._id %>" class="no-underline text-inherit">
                     <div class="bg-white rounded-lg shadow-sm p-4 event-card border border-red-200">
                       <% if (event.images && event.images.length> 0) { %>
                         <img src="<%= event.images[0] %>" alt="Event Image"
@@ -138,7 +138,7 @@
               <p class="text-center text-gray-500 col-span-3">No upcoming events.</p>
               <% } %>
                 <% upcomingEvents.forEach(event=> { %>
-                  <a href="/events/<%= event._id %>" class="no-underline text-inherit">
+                  <a href="/description/<%= event._id %>" class="no-underline text-inherit">
                     <div class="bg-white rounded-lg shadow-sm p-4 event-card border border-red-200">
                       <% if (event.images && event.images.length> 0) { %>
                         <img src="<%= event.images[0] %>" alt="Event Image"
@@ -152,7 +152,6 @@
                           </p>
                           <p class="text-gray-700">Venue: <%= event.venue %>
                           </p>
-                          <button class="btn btn-outline-danger mt-3">Register</button>
                     </div>
                   </a>
                   <% }) %>

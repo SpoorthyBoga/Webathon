@@ -15,18 +15,18 @@
     .sidebar a:hover { background-color: #d61c4e; }
   </style>
 </head>
-<body class="bg-blue-30 min-h-screen">
+<body class="bg-blue-50 min-h-screen">
   <div class="d-flex">
-      <div class="sidebar p-3 text-white w-1/5 hidden md:block bg-red-700 min-h-screen" id="sidebar">
-        <h2 class="text-3xl font-bold mb-6 ml-2 pt-4" style="font-family: 'roboto', sans-serif;">Dashboard</h2>
-          <ul class="nav flex-column space-y-2">
-        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block"  href="/events">Events</a></li>
-        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block" href="#">Approved</a></li>
-        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block" href="/approvalstatus">Approval Status</a></li>
-        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block" href="/new_event">New Event</a></li>
-        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block" href="#">Certificates</a></li>
-        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block" href="/venue">Venues</a></li>
-        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block" href="/attendance">Attendance</a></li>
+    <!-- Sidebar -->
+    <aside class="sidebar p-3 text-white w-1/5 hidden md:block">
+      <h2 class="text-2xl font-bold mb-4">Dashboard</h2>
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2"><a class="nav-link" href="/events">Events</a></li>
+        <li class="nav-item mb-2"><a class="nav-link" href="#">Approved</a></li>
+        <li class="nav-item mb-2"><a class="nav-link" href="/approvalstatus">Approval Status</a></li>
+        <li class="nav-item mb-2"><a class="nav-link" href="/new_event">New Event</a></li>
+        <li class="nav-item mb-2"><a class="nav-link" href="/venue">Venues</a></li>
+        <li class="nav-item mb-2"><a class="nav-link" href="/attendance">Attendance</a></li>
       </ul>
     </aside>
 
@@ -68,7 +68,7 @@
               <p class="text-center text-gray-500 col-span-3">No ongoing events.</p>
             <% } %>
             <% ongoingEvents.forEach(event => { %>
-              <a href="/events/<%= event._id %>" class="no-underline text-inherit">
+              <a href="/description/<%= event._id %>" class="no-underline text-inherit">
                 <div class="bg-white rounded-lg shadow-md p-4 event-card border border-red-200">
                   <% if (event.images?.length) { %>
                     <img src="<%= event.images[0] %>" alt="Event Image" class="w-full h-40 object-cover rounded mb-3">
@@ -90,7 +90,7 @@
               <p class="text-center text-gray-500 col-span-3">No upcoming events.</p>
             <% } %>
             <% upcomingEvents.forEach(event => { %>
-              <a href="/events/<%= event._id %>" class="no-underline text-inherit">
+              <a href="/description/<%= event._id %>" class="no-underline text-inherit">
                 <div class="bg-white rounded-lg shadow-md p-4 event-card border border-red-200">
                   <% if (event.images?.length) { %>
                     <img src="<%= event.images[0] %>" alt="Event Image" class="w-full h-40 object-cover rounded mb-3">
