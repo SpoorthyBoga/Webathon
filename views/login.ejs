@@ -128,13 +128,14 @@
     <form action="/login" method="POST">
       <input type="email" name="email" placeholder="Email address" required />
       <input type="password" name="password" placeholder="Password" required />
+      
       <select name="dashboard" required>
-        <option value="" disabled selected>Select Role</option>
         <option value="Student">Student</option>
         <option value="Faculty">Faculty</option>
         <option value="Organizer">Organizer</option>
         <option value="Management">Management</option>
       </select>
+      
 
       <button type="submit">Login</button>
     </form>
