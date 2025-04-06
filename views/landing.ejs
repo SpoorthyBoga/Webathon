@@ -175,6 +175,7 @@
     .event-card {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         max-width: 320px;
+        border-radius: 10px;
     }
 
     .event-card:hover {
@@ -200,7 +201,7 @@
     .events-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1.5rem;
+        gap: 1.2rem;
         padding:1rem;
     }
 
@@ -211,7 +212,7 @@
 <body class="bg-white text-dark">
 
     <!-- Header -->
-    <nav class="navbar navbar-expand-md bg-white shadow-sm sticky-top z-50">
+    <nav class="navbar navbar-expand-md bg-white shadow-sm sticky-top z-50" style="opacity: 0.95; z-index: 1030;">
         <div class="container">
             <a class="navbar-brand text-danger fw-bold fs-4" href="/">
                 <img src="https://cdn.prod.website-files.com/60af144c343b5fdc5513a640/62201bb0b4baad0916cfc7bb_03c756_0a279644d7694f22996bd152f6f8b6be_mv2.png"
@@ -301,55 +302,7 @@
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer style="background-color: #ffe5e5; color: #6b0000;" class="pt-5">
-        <div class="container">
-            <div class="row text-center text-md-start">
-                <div class="col-12 col-md-4 mb-4">
-                    <h5 class="fw-bold mb-3">Campus Events</h5>
-                    <p>Your one-stop platform for all campus events and activities.</p>
-                    <div class="d-flex justify-content-center justify-content-md-start gap-3">
-                        <a href="#" class="text-danger-emphasis social-icon" aria-label="LinkedIn">
-                            <i class="bi bi-linkedin fs-4"></i>
-                        </a>
-                        <a href="#" class="text-danger-emphasis social-icon" aria-label="Instagram">
-                            <i class="bi bi-instagram fs-4"></i>
-                        </a>
-                        <a href="#" class="text-danger-emphasis social-icon" aria-label="Twitter">
-                            <i class="bi bi-twitter-x fs-4"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-6 col-md-4 mb-4">
-                    <h5 class="fw-bold mb-3">College Clubs</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="footer-link">Tech Club</a></li>
-                        <li><a href="#" class="footer-link">Cultural Society</a></li>
-                        <li><a href="#" class="footer-link">Sports Association</a></li>
-                        <li><a href="#" class="footer-link">Debate Club</a></li>
-                        <li><a href="#" class="footer-link">Photography Club</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-6 col-md-4 mb-4">
-                    <h5 class="fw-bold mb-3">Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="/events" class="footer-link">All Events</a></li>
-                        <li><a href="/about" class="footer-link">About Us</a></li>
-                        <li><a href="/contact" class="footer-link">Contact</a></li>
-                        <li><a href="/privacy-policy" class="footer-link">Privacy Policy</a></li>
-                        <li><a href="/terms" class="footer-link">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="pt-3 mt-4 border-top d-flex flex-column flex-md-row justify-content-center align-items-center"
-                style="border-color: #ef4444; padding-bottom: 1rem;">
-                <p class="mb-0 text-center">&copy; <span id="year"></span> Campus Events. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <%- include('partials/footer') %>
 
     <script>
         document.getElementById("year").textContent = new Date().getFullYear();

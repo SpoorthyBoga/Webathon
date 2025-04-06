@@ -395,49 +395,12 @@ async function renderEventDashboard(req, res, viewName) {
 }
 
 
-async function renderRegisteredEvents(req, res, viewName) {
-  try {
-    const email = req.params.email || req.body.email;
-
-    const student = await global.StudentModel.findOne({ email }).populate("registeredEvents");
-
-    if (!student) return res.status(404).send("Student not found");
-
-    const today = moment().startOf("day");
-    const ongoingEvents = [];
-    const upcomingEvents = [];
-
-    student.registeredEvents.forEach((event) => {
-      const parsedDate = moment(event.date, [
-        "YYYY-MM-DD",
-        "YYYY/MM/DD",
-        "DD-MM-YYYY",
-        "MM-DD-YYYY",
-        "MMMM D, YYYY",
-        "MMM D, YYYY",
-        "D MMMM YYYY",
-      ], true);
-
-      if (!parsedDate.isValid()) return;
-
-      if (parsedDate.isSame(today, "day")) ongoingEvents.push(event);
-      else if (parsedDate.isAfter(today, "day")) upcomingEvents.push(event);
-    });
-
-    res.render(viewName, {
-      event
-    });
-  } catch (err) {
-    console.error(`🚨 Error rendering ${viewName}:`, err);
-    res.status(500).send("Error loading registered events");
-  }
-}
 
 app.get("/landing", (req, res) => renderEventDashboard(req, res, "landing.ejs"));
-app.get("/s_dashboard/:email", (req, res) => renderRegisteredEvents(req, res, "s_dashboard.ejs"));
-app.get("/f_dashboard/:email", (req, res) => renderRegisteredEvents(req, res, "f_dashboard.ejs"));
-app.get("/e_dashboard/:email", (req, res) => renderRegisteredEvents(req, res, "e_dashboard.ejs"));
-app.get("/m_dashboard/:email", (req, res) => renderRegisteredEvents( req, res,"m_dashboard.ejs"));
+app.get("/s_dashboard/:email", (req, res) => renderEventDashboard(req, res, "s_dashboard.ejs"));
+app.get("/f_dashboard/:email", (req, res) => renderEventDashboard(req, res, "f_dashboard.ejs"));
+app.get("/e_dashboard/:email", (req, res) => renderEventDashboard(req, res, "e_dashboard.ejs"));
+app.get("/m_dashboard/:email", (req, res) => renderEventDashboard( req, res,"m_dashboard.ejs"));
 app.get("/events", (req, res) => renderEventDashboard(req, res, "events.ejs"));
 
 // Event description
