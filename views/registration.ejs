@@ -43,7 +43,7 @@
                 <p><strong>Name:</strong><%= student.name %></p>
                  <p><strong>Email:</strong><%= student.email %></p>
                 <% if (student.rollno) { %>
-                    <p><strong>Roll Number:</strong> <%= student.rollNumber %></p>
+                    <p><strong>Roll Number:</strong> <%= student.rollno %></p>
                 <% } %>
             </div>
 
@@ -60,7 +60,7 @@
                     <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
                     <input type="tel" class="form-control" id="phone" name="phone" required placeholder="Enter your 10-digit phone number">
                 </div>
-                <% if (event.amount == "Free") { %>
+                <% if (event.amount ==="Free") { %>
                     <p>Registration Fee: <strong class="fs-5">FREE</strong></p>
                  <% } else { %>
                      <p>Registration is <%= event.amount %> for this event.</p>

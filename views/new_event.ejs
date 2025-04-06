@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -153,4 +153,158 @@
 
 </body>
 
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create New Event</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+      color: #e11d48;
+      font-weight: bold;
+    }
+
+    .btn-submit {
+      background-color: #e11d48;
+      border: none;
+    }
+
+    .btn-submit:hover {
+      background-color: #c8103d;
+    }
+
+    .remove-btn {
+      margin-top: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h2 class="form-title mb-4">Create New Event</h2>
+      <form action="/events/new" method="POST">
+        <!-- Title -->
+        <div class="mb-3">
+          <label class="form-label">Event Title</label>
+          <input type="text" name="title" class="form-control" placeholder="Enter Event Name" required>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea name="description" class="form-control" rows="3" placeholder="Event Description" required></textarea>
+        </div>
+
+        <!-- Category -->
+        <div class="mb-3">
+          <label class="form-label">Category</label>
+          <select name="category" class="form-select" required>
+            <option value="">Select category</option>
+            <option>Workshop</option>
+            <option>Fun</option>
+            <option>Hackathon</option>
+            <option>Seminars</option>
+            <option>Webinars</option>
+          </select>
+        </div>
+
+        <!-- Date & Time -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Date</label>
+            <input type="date" name="date" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Start Time</label>
+            <input type="time" name="time" class="form-control" required>
+          </div>
+        </div>
+
+        <!-- Venue & Amount -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Venue</label>
+            <input type="text" name="venue" class="form-control" placeholder="Event venue" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Entry Amount</label>
+            <input type="text" name="amount" class="form-control" placeholder="Free / 100 INR">
+          </div>
+        </div>
+
+        <!-- Capacity -->
+        <div class="mb-3">
+          <label class="form-label">Capacity</label>
+          <input type="number" name="capacity" class="form-control" placeholder="Total number of participants allowed">
+        </div>
+
+        <!-- Coordinators -->
+        <div class="mb-3">
+          <label class="form-label">Student Coordinators</label>
+          <div id="coordinatorSection">
+            <div class="row g-2 mb-2 coordinator-row">
+              <div class="col-md-5">
+                <input type="text" class="form-control" placeholder="Name" name="coordinatorName[]">
+              </div>
+              <div class="col-md-5">
+                <input type="tel" class="form-control" placeholder="Phone Number" name="coordinatorPhone[]">
+              </div>
+              <div class="col-md-2 text-end">
+                <button type="button" class="btn btn-outline-danger remove-btn" onclick="removeCoordinator(this)">🗑</button>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addCoordinator()">+ Add Coordinator</button>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-submit w-100">Submit for Approval</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function addCoordinator() {
+      const section = document.getElementById("coordinatorSection");
+      const row = document.createElement("div");
+      row.className = "row g-2 mb-2 coordinator-row";
+      row.innerHTML = `
+        <div class="col-md-5">
+          <input type="text" class="form-control" placeholder="Name" name="coordinatorName[]">
+        </div>
+        <div class="col-md-5">
+          <input type="tel" class="form-control" placeholder="Phone Number" name="coordinatorPhone[]">
+        </div>
+        <div class="col-md-2 text-end">
+          <button type="button" class="btn btn-outline-danger remove-btn" onclick="removeCoordinator(this)">🗑</button>
+        </div>`;
+      section.appendChild(row);
+    }
+
+    function removeCoordinator(button) {
+      const row = button.closest('.coordinator-row');
+      row.remove();
+    }
+  </script>
+</body>
 </html>
