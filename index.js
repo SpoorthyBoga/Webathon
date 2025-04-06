@@ -308,9 +308,7 @@ async function main() {
 main().catch((err) => console.error(err));
 
 // Routes
-
-app.get("/login", (req, res) => res.render("login.ejs"));
-
+app.get('/login', (req,res)=>res.render("login.ejs"))
 app.post("/login", async (req, res) => {
   const { email, password, dashboard } = req.body;
 
@@ -322,23 +320,22 @@ app.post("/login", async (req, res) => {
   let redirectPath = "/login";
 
   try {
-    console.log(dashboard);
     switch (dashboard) {
       case "Student":
         user = await global.StudentModel.findOne({ email });
-        redirectPath = "/s_dashboard";
+        if (user) redirectPath = `/s_dashboard/${user.email}`;
         break;
       case "Faculty":
         user = await global.FacultyModel.findOne({ email });
-        redirectPath = "/f_dashboard";
+        if (user) redirectPath = `/f_dashboard/${user.email}`;
         break;
       case "Organizer":
         user = await global.OrganiserModel.findOne({ email });
-        redirectPath = "/e_dashboard";
+        if (user) redirectPath = `/e_dashboard/${user.email}`;
         break;
       case "Management":
         user = await global.ManagementModel.findOne({ email });
-        redirectPath = "/m_dashboard";
+        if (user) redirectPath = `/m_dashboard/${user.email}`;
         break;
       default:
         return res.status(400).send("Invalid dashboard selected.");
@@ -366,6 +363,7 @@ app.post("/login", async (req, res) => {
 // Reusable event dashboard logic
 async function renderEventDashboard(req, res, viewName) {
   try {
+
     const allEvents = await global.EventModel.find();
     const today = moment().startOf("day");
 
@@ -395,11 +393,51 @@ async function renderEventDashboard(req, res, viewName) {
     res.status(500).send("Error loading events");
   }
 }
+
+
+async function renderRegisteredEvents(req, res, viewName) {
+  try {
+    const email = req.params.email || req.body.email;
+
+    const student = await global.StudentModel.findOne({ email }).populate("registeredEvents");
+
+    if (!student) return res.status(404).send("Student not found");
+
+    const today = moment().startOf("day");
+    const ongoingEvents = [];
+    const upcomingEvents = [];
+
+    student.registeredEvents.forEach((event) => {
+      const parsedDate = moment(event.date, [
+        "YYYY-MM-DD",
+        "YYYY/MM/DD",
+        "DD-MM-YYYY",
+        "MM-DD-YYYY",
+        "MMMM D, YYYY",
+        "MMM D, YYYY",
+        "D MMMM YYYY",
+      ], true);
+
+      if (!parsedDate.isValid()) return;
+
+      if (parsedDate.isSame(today, "day")) ongoingEvents.push(event);
+      else if (parsedDate.isAfter(today, "day")) upcomingEvents.push(event);
+    });
+
+    res.render(viewName, {
+      event
+    });
+  } catch (err) {
+    console.error(`🚨 Error rendering ${viewName}:`, err);
+    res.status(500).send("Error loading registered events");
+  }
+}
+
 app.get("/landing", (req, res) => renderEventDashboard(req, res, "landing.ejs"));
-app.get("/s_dashboard", (req, res) => renderEventDashboard(req, res, "s_dashboard.ejs"));
-app.get("/f_dashboard", (req, res) => renderEventDashboard(req, res, "f_dashboard.ejs"));
-app.get("/e_dashboard", (req, res) => renderEventDashboard(req, res, "e_dashboard.ejs"));
-app.get("/m_dashboard", (req, res) => renderEventDashboard( req, res,"m_dashboard.ejs"));
+app.get("/s_dashboard/:email", (req, res) => renderRegisteredEvents(req, res, "s_dashboard.ejs"));
+app.get("/f_dashboard/:email", (req, res) => renderRegisteredEvents(req, res, "f_dashboard.ejs"));
+app.get("/e_dashboard/:email", (req, res) => renderRegisteredEvents(req, res, "e_dashboard.ejs"));
+app.get("/m_dashboard/:email", (req, res) => renderRegisteredEvents( req, res,"m_dashboard.ejs"));
 app.get("/events", (req, res) => renderEventDashboard(req, res, "events.ejs"));
 
 // Event description
@@ -464,6 +502,39 @@ app.post("/events/new", async (req, res) => {
   }
 });
 
+app.get('/profile', (req,res)=>res.render("profile.ejs"));
+app.get('/about', (req,res)=>res.render("about.ejs"))
+
+
+app.get('/registered', async (req, res) => {
+  const userId = "67f171d3ee97841eb84206ab";
+
+  const student = await global.StudentModel.findById(userId).populate({
+    path: 'registeredEvents',
+    model: global.EventModel // use the correct Event model from its connection
+  });
+
+  res.render('registered.ejs', { user: student });
+});
+
+app.get('/register/:id', async (req, res) => {
+  const eventId = req.params.id;
+  const studentId = "67f171d3ee97841eb84206ab"; // Replace with session ID in real case
+
+  try {
+    const event = await global.EventModel.findById(eventId);
+    const student = await global.StudentModel.findById(studentId);
+
+    if (!event || !student) {
+      return res.status(404).send("Event or student not found");
+    }
+
+    res.render("registration.ejs", { event, student });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
+});
 
 // Start server
 app.listen(port, () => console.log(`✅ Server listening on port ${port}`));
