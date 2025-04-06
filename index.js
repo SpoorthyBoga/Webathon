@@ -499,5 +499,23 @@ app.get('/register/:id', async (req, res) => {
   }
 });
 
+app.get('/views/events/filter', async (req, res) => {
+  const { category, date, location, keyword } = req.query;
+
+  let filter = {};
+
+  if (category) filter.category = category;
+  if (location) filter.location = location;
+  if (date) filter.date = { $gte: new Date(date) };
+  if (keyword) filter.interests = { $regex: keyword, $options: 'i' };
+
+  try {
+      const events = await Event.find(filter);
+      res.render('events/filter_results', { events });
+  } catch (err) {
+      res.status(500).send("Error filtering events");
+  }
+});
+
 // Start server
 app.listen(port, () => console.log(`✅ Server listening on port ${port}`));

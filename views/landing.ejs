@@ -1,116 +1,4 @@
-<!-- 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Campus Events</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="flex flex-col min-h-screen bg-gray-50 text-gray-800">
-
-  Header
-  <header class="bg-white shadow">
-    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-rose-600">Campus Events</h1>
-      <nav class="space-x-4">
-        <a href="/events" class="text-gray-700 text-decoration-none hover:text-rose-600">Events</a>
-        <a href="/about" class="text-gray-700 text-decoration-none hover:text-rose-600">About</a>
-        <a href="/login" class="bg-rose-600 text-decoration-none hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-lg hover:rounded">Sign In</a>
-      </nav>
-    </div>
-  </header>
-
-  Main Content
-  <main class="flex-grow container mx-auto px-4 py-10">
-    <!-- Hero Section -->
-    <!-- <section class="mb-12 text-center">
-      <h2 class="text-4xl font-bold mb-4">Welcome to Campus Events</h2>
-      <p class="text-xl mb-6">Discover, attend, and organize events on campus</p>
-      <a href="/login" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-6 rounded-lg">Sign In</a>
-    </section>
-
-    <!-- Ongoing Events -->
-    <h3 class="text-2xl font-bold mb-4">Ongoing Events</h3>
-    <div class="tab-pane fade show active" id="ongoing" role="tabpanel">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <% ongoingEvents.forEach(event => { %>
-                <div class="bg-white rounded-lg shadow-md p-4 event-card">
-                    <h3 class="text-xl font-semibold text-blue-700"><%= event.title %></h3>
-                    <p class="text-gray-600"><%= event.date %> | <%= event.time %></p>
-                    <p class="text-gray-700">Venue: <%= event.venue %></p>
-                    <button class="btn btn-primary mt-2">View Details</button>
-                </div>
-            <% }) %>
-        </div>
-    </div>
-
-    
-          <!-- Upcoming
-           <section>
-            <h1 class="text-2xl font-bold text-rose-600">Upcoming Events</h1>
-            <br>
-            <div class="tab-pane fade" id="upcoming" role="tabpanel">
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <% if (upcomingEvents.length === 0) { %>
-                  <p class="text-center text-gray-500 col-span-3">No upcoming events.</p>
-                <% } %>
-                <% upcomingEvents.forEach(event => { %>
-                  <a href="/events/<%= event._id %>" class="no-underline text-inherit">
-                    <div class="bg-white rounded-lg shadow-md p-4 event-card border border-red-200">
-                      <% if (event.images && event.images.length > 0) { %>
-                        <img src="<%= event.images[0] %>" alt="Event Image" class="w-full h-40 object-cover rounded mb-3">
-                      <% } %>
-                      <h3 class="text-xl font-semibold text-red-700"><%= event.title %></h3>
-                      <p class="text-gray-600"><%= event.date %> | <%= event.time %></p>
-                      <p class="text-gray-700">Venue: <%= event.venue %></p>
-                      <button class="btn btn-outline-danger mt-2">Register</button>
-                    </div>
-                  </a>
-                <% }) %>
-              </div>
-            </div>
-           </section>
-          
-  </main> -->
-
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-8">
-    <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div>
-        <h4 class="text-lg font-semibold mb-2">Campus Events</h4>
-        <p class="text-sm">Your one-stop platform for all campus events and activities.</p>
-        <div class="flex space-x-4 mt-4">
-          <a href="#"><img src="/icons/facebook.svg" alt="Facebook" class="h-5" /></a>
-          <a href="#"><img src="/icons/instagram.svg" alt="Instagram" class="h-5" /></a>
-          <a href="#"><img src="/icons/twitter.svg" alt="Twitter" class="h-5" /></a>
-        </div>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold mb-2">College Clubs</h4>
-        <ul class="space-y-1 text-sm">
-          <li><a href="#" class="hover:underline">Tech Club</a></li>
-          <li><a href="#" class="hover:underline">Cultural Society</a></li>
-          <li><a href="#" class="hover:underline">Sports Association</a></li>
-          <li><a href="#" class="hover:underline">Debate Club</a></li>
-          <li><a href="#" class="hover:underline">Photography Club</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="text-lg font-semibold mb-2">Quick Links</h4>
-        <ul class="space-y-1 text-sm">
-          <li><a href="#" class="hover:underline">All Events</a></li>
-          <li><a href="#" class="hover:underline">About Us</a></li>
-          <li><a href="#" class="hover:underline">Contact</a></li>
-          <li><a href="#" class="hover:underline">Privacy Policy</a></li>
-          <li><a href="#" class="hover:underline">Terms of Service</a></li>
-        </ul>
-      </div>
-    </div>
-  </footer> -->
-  <%- include('partials/footer') %>
-</body>
-</html> --> 
+</html>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -202,7 +90,7 @@
     <!-- Header -->
     <nav class="navbar navbar-expand-md bg-white shadow-sm sticky-top z-50" style="opacity: 0.95; z-index: 1030;">
         <div class="container">
-            <a class="navbar-brand text-danger fw-bold fs-4" href="/">
+            <a class="navbar-brand text-danger fw-bold fs-4" href="/landing">
                 <img src="https://cdn.prod.website-files.com/60af144c343b5fdc5513a640/62201bb0b4baad0916cfc7bb_03c756_0a279644d7694f22996bd152f6f8b6be_mv2.png"
                     alt="Logo" class="logo-img" />
                 Campus Events
