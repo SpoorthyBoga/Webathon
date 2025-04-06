@@ -81,6 +81,10 @@ app.get("/landing", (req,res)=>{
     res.render("landing.ejs", eventsData)
 });
 
+app.get("/about", (req,res)=>{
+  res.render("about.ejs")
+})
+
 app.get("/login", (req,res)=>{
     res.render("login.ejs")
 })

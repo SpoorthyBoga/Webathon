@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Login | CampusConnect</title>
@@ -7,108 +8,138 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #f1f5f9;
+      background: linear-gradient(to right, #ffe6e6, #fff5f5);
       margin: 0;
       padding: 0;
-    }
-
-    nav {
-      background: #e11d48;;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    nav a {
-      color: white;
-      margin: 0 15px;
-      text-decoration: none;
-      font-weight: 500;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
 
     .login-container {
-      max-width: 400px;
-      margin: 60px auto;
       background: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
     }
 
-    h2 {
-      text-align: center;
+    .login-container h2 {
       color: #e11d48;
-      margin-bottom: 30px;
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      text-align: center;
+      margin-top: 0px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
 
     form input[type="email"],
-    form input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 20px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-
+    form input[type="password"],
     form select {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 20px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 0;
+      /* No bottom margin */
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
       font-size: 1rem;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+
+    form input:focus,
+    form select:focus {
+      border-color: #e11d48;
+      outline: none;
     }
 
     form button {
       width: 100%;
-      padding: 12px;
-      background:#e11d48;
+      padding: 14px;
+      background: #e11d48;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s ease;
     }
 
     form button:hover {
-      background:#e11d48;;
+      background: #be123c;
     }
 
     .note {
       text-align: center;
       margin-top: 15px;
+      font-size: 0.95rem;
+      color: #6b7280;
     }
 
     .note a {
-        color: #e11d48;
+      color: #e11d48;
       text-decoration: none;
+      font-weight: 500;
     }
 
+    .note a:hover {
+      text-decoration: underline;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .brand img {
+      height: 80px;
+      margin-bottom: 0%;
+    }
+
+    p {
+      font-size: 35px;
+      color: #e11d48;
+      font-weight: bold;
+      margin: 0%;
+    }
   </style>
 </head>
+
 <body>
 
-
-  <!-- Login Form -->
   <div class="login-container">
-    <h2>Login to CampusConnect</h2>
+    <div class="brand">
+      <img
+        src="https://cdn.prod.website-files.com/60af144c343b5fdc5513a640/62201bb0b4baad0916cfc7bb_03c756_0a279644d7694f22996bd152f6f8b6be_mv2.png"
+        alt="CampusConnect Logo">
+      <p>VConnect</p>
+    </div>
+
+    <h2>Login to Your Account</h2>
+
     <form action="/login" method="POST">
       <input type="email" name="email" placeholder="Email address" required />
       <input type="password" name="password" placeholder="Password" required />
-
       <select name="dashboard" required>
-        <option value="">Select your dashboard</option>
-        <option value="s_dashboard">Student</option>
-        <option value="f_dashboard">Faculty</option>
-        <option value="e_dashboard">Event Organizer</option>
-        <option value="m_dashboard">Management</option>
+        <option value="" disabled selected>Select Role</option>
+        <option value="Student">Student</option>
+        <option value="Faculty">Faculty</option>
+        <option value="Organizer">Organizer</option>
+        <option value="Management">Management</option>
       </select>
 
       <button type="submit">Login</button>
     </form>
-
   </div>
 
 </body>
+
 </html>
