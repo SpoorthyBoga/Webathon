@@ -1,57 +1,59 @@
 <section style="background-color: #f9fafb; min-height: 100vh; padding-top: 2rem;">
     <div class="container py-4">
-        <h2 class="mb-4 fw-bold text-center text-md-start" style="color: #111827;">My Profile</h2>
-
-        <div class="card shadow-sm border-0 p-4" style="border-radius: 1rem;">
-            <div class="row align-items-center">
-
-                <!-- Profile Info -->
-                <div class="col-md-4 text-center mb-4 mb-md-0">
-                    <img src="https://i0.wp.com/icrtcst24.rvscollege.ac.in/wp-content/uploads/2015/04/speaker-3-v2.jpg?fit=768%2C768&ssl=1"
-                        alt="Profile Image" class="rounded-circle mb-3" width="120" height="120">
-                    <h5 class="fw-bold mb-1" style="color: #1f2937;">John Doe</h5>
-                    <span class="badge bg-danger text-white text-capitalize">Student</span>
-                </div>
-
-                <!-- Details -->
-                <div class="col-md-8">
-                    <div class="row mb-3">
-                        <div class="col-sm-4 fw-medium text-muted">Email:</div>
-                        <div class="col-sm-8 text-dark">john.doe@example.com</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-4 fw-medium text-muted">Roll No:</div>
-                        <div class="col-sm-8 text-dark">21BCE1234</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-4 fw-medium text-muted">Interests:</div>
-                        <div class="col-sm-8 text-dark">Coding, Robotics, Hackathons</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-4 fw-medium text-muted">Following:</div>
-                        <div class="col-sm-8 text-dark">
-                            VJIT Coding Club, AI & ML Society
-                        </div>
-                    </div>
-
-                    <div class="d-flex flex-wrap gap-2 mt-3">
-                        <a href="/edit-profile" class="btn" style="background-color: #f43f5e; color: white;">
-                            Edit Profile
-                        </a>
-                        <a href="/view-certificates" class="btn btn-outline-danger">
-                            <i class="bi bi-award me-1"></i>View Certificates
-                        </a>
-                        <a href="/view-badges" class="btn btn-outline-danger">
-                            <i class="bi bi-star-fill me-1"></i>View Badges
-                        </a>
-                    </div>
-                </div>
-
+      <h2 class="mb-4 fw-bold text-center text-md-start" style="color: #111827;">My Profile</h2>
+  
+      <div class="card shadow-sm border-0 p-4" style="border-radius: 1rem;">
+        <div class="row align-items-center">
+  
+      
+          <div class="col-md-4 text-center mb-4 mb-md-0">
+            <img src="https://i0.wp.com/icrtcst24.rvscollege.ac.in/wp-content/uploads/2015/04/speaker-3-v2.jpg?fit=768%2C768&ssl=1"
+              alt="Profile Image" class="rounded-circle mb-3" width="120" height="120">
+            <h5 class="fw-bold mb-1" style="color: #1f2937;"><%= student.name %></h5>
+            <span class="badge bg-danger text-white text-capitalize"><%= student.role %></span>
+          </div>
+  
+  
+          <div class="col-md-8">
+            <div class="row mb-3">
+              <div class="col-sm-4 fw-medium text-muted">Email:</div>
+              <div class="col-sm-8 text-dark"><%= student.email %></div>
             </div>
+            <div class="row mb-3">
+              <div class="col-sm-4 fw-medium text-muted">Roll No:</div>
+              <div class="col-sm-8 text-dark"><%= student.rollno %></div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-4 fw-medium text-muted">Interests:</div>
+              <div class="col-sm-8 text-dark">
+                <%= student.interests.length ? student.interests.join(', ') : 'Not specified' %>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-4 fw-medium text-muted">Following:</div>
+              <div class="col-sm-8 text-dark">
+                <%= student.followingOrganizers.length ? student.followingOrganizers.join(', ') : 'Not following any organizers' %>
+              </div>
+            </div>
+  
+            <div class="d-flex flex-wrap gap-2 mt-3">
+              <a href="/edit-profile/<%= student.email %>" class="btn" style="background-color: #f43f5e; color: white;">
+                Edit Profile
+              </a>
+              <a href="/certificates/<%= student.email %>" class="btn btn-outline-danger">
+                <i class="bi bi-award me-1"></i>View Certificates
+              </a>
+              <a href="/badges/<%= student.email %>" class="btn btn-outline-danger">
+                <i class="bi bi-star-fill me-1"></i>View Badges
+              </a>
+            </div>
+          </div>
+  
         </div>
+      </div>
     </div>
-</section>
-
-<!-- Include Bootstrap + Bootstrap Icons (if not already loaded) -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+  </section>
+  
+ 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />

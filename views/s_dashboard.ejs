@@ -10,8 +10,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .event-card {
-            transition: transform 0.3s ease-in-out;
-        }
+    transition: transform 0.3s ease-in-out;
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
         .event-card:hover {
             transform: scale(1.05);
         }
@@ -34,9 +39,9 @@
             <h2 class="text-2xl font-bold mb-4">Dashboard</h2>
             <ul class="nav flex-column">
                 <li class="nav-item mb-2"><a class="nav-link" href="/events">Events</a></li>
-                <li class="nav-item mb-2"><a class="nav-link" href="#">Registered</a></li>
+                <li><a class="nav-link" href="/registered/<%= user.email %>">Registered</a></li>
                 <li class="nav-item mb-2"><a class="nav-link" href="#">Attended</a></li>
-                <li class="nav-item mb-2"><a class="nav-link" href="#">Certificates and Badges</a></li>
+                <li class="nav-item mb-2"><a class="nav-link" href="/certificates/<%= user.email %>">Certificates and Badges</a></li>
             </ul>
         </div>
         <div class="flex-grow p-5">
@@ -50,7 +55,7 @@
                             <i class="bi bi-person-circle"></i> Profile
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item"  href="/profile">View Profile</a></li>
+                            <li><a class="dropdown-item"  href="/profile/<%=user.email%>">View Profile</a></li>
                             <li><a class="dropdown-item" href="#">Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
@@ -68,52 +73,53 @@
                 </li>
             </ul>
 
-            <div class="tab-content" id="eventTabsContent">
-                <!-- Ongoing Events -->
-                <div class="tab-content" id="eventTabsContent">
-                    <!-- Ongoing -->
-                    <div class="tab-pane fade show active" id="ongoing" role="tabpanel">
-                      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <% if (ongoingEvents.length === 0) { %>
-                          <p class="text-center text-gray-500 col-span-3">No ongoing events.</p>
-                        <% } %>
-                        <% ongoingEvents.forEach(event => { %>
-                          <a href="/events/<%= event._id %>" class="no-underline text-inherit">
-                            <div class="bg-white rounded-lg shadow-md p-4 event-card border border-red-200">
-                              <% if (event.images && event.images.length > 0) { %>
-                                <img src="<%= event.images[0] %>" alt="Event Image" class="w-full h-40 object-cover rounded mb-3">
-                              <% } %>
-                              <h3 class="text-xl font-semibold text-red-700"><%= event.title %></h3>
-                              <p class="text-gray-600"><%= event.date %> | <%= event.time %></p>
-                              <p class="text-gray-700">Venue: <%= event.venue %></p>
-                              <button class="btn btn-danger mt-2">View Details</button>
-                            </div>
-                          </a>
-                        <% }) %>
+
+                    <div class="tab-content" id="eventTabsContent">
+                        <!-- Ongoing -->
+                        <div class="tab-pane fade show active" id="ongoing" role="tabpanel">
+                          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <% if (ongoingEvents.length === 0) { %>
+                              <p class="text-center text-gray-500 col-span-3">No ongoing events.</p>
+                            <% } %>
+                            <% ongoingEvents.forEach(event => { %>
+                              <div class="bg-white rounded-lg shadow-md p-4 event-card border border-red-200 min-h-[360px] flex flex-col justify-between">
+                                <% if (event.images && event.images.length > 0) { %>
+                                  <img src="<%= event.images[0] %>" alt="Event Image" class="w-full h-40 object-cover rounded mb-3">
+                                <% } %>
+                                <div>
+                                  <h3 class="text-xl font-semibold text-red-700 mb-1"><%= event.title %></h3>
+                                  <p class="text-gray-600"><%= event.date %> | <%= event.time %></p>
+                                  <p class="text-gray-700 mb-2">Venue: <%= event.venue %></p>
+                                </div>
+                                <a href="/description/<%= event._id %>" class="btn btn-danger w-full mt-2">View Details</a>
+                              </div>
+                            <% }) %>
+                          </div>
+                        </div>
+                      
+                        <!-- Upcoming -->
+                        <div class="tab-pane fade" id="upcoming" role="tabpanel">
+                          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <% if (upcomingEvents.length === 0) { %>
+                              <p class="text-center text-gray-500 col-span-3">No upcoming events.</p>
+                            <% } %>
+                            <% upcomingEvents.forEach(event => { %>
+                              <div class="bg-white rounded-lg shadow-md p-4 event-card border border-red-200 min-h-[360px] flex flex-col justify-between">
+                                <% if (event.images && event.images.length > 0) { %>
+                                  <img src="<%= event.images[0] %>" alt="Event Image" class="w-full h-40 object-cover rounded mb-3">
+                                <% } %>
+                                <div>
+                                  <h3 class="text-xl font-semibold text-red-700 mb-1"><%= event.title %></h3>
+                                  <p class="text-gray-600"><%= event.date %> | <%= event.time %></p>
+                                  <p class="text-gray-700 mb-2">Venue: <%= event.venue %></p>
+                                </div>
+                                <a href="/register/<%= event._id %>/<%= user.email %>" class="btn btn-outline-danger w-full mt-2">Register</a>
+                              </div>
+                            <% }) %>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-              
-                    <!-- Upcoming -->
-                    <div class="tab-pane fade" id="upcoming" role="tabpanel">
-                      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <% if (upcomingEvents.length === 0) { %>
-                          <p class="text-center text-gray-500 col-span-3">No upcoming events.</p>
-                        <% } %>
-                        <% upcomingEvents.forEach(event => { %>
-                          <a href="/events/<%= event._id %>" class="no-underline text-inherit">
-                            <div class="bg-white rounded-lg shadow-md p-4 event-card border border-red-200">
-                              <% if (event.images && event.images.length > 0) { %>
-                                <img src="<%= event.images[0] %>" alt="Event Image" class="w-full h-40 object-cover rounded mb-3">
-                              <% } %>
-                              <h3 class="text-xl font-semibold text-red-700"><%= event.title %></h3>
-                              <p class="text-gray-600"><%= event.date %> | <%= event.time %></p>
-                              <p class="text-gray-700">Venue: <%= event.venue %></p>
-                              <button class="btn btn-outline-danger mt-2">Register</button>
-                            </div>
-                          </a>
-                        <% }) %>
-                      </div>
-                    </div>
+                      
                   </div>
                 </div>
             </div>
