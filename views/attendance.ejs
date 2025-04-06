@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Attendance Scanner</title>
+
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #e11d48;
+            margin-bottom: 1rem;
+        }
+
+        #reader {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            margin-bottom: 1rem;
+        }
+
+        #result {
+            margin: 1rem 0;
+            font-size: 1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .btn {
+            background-color: #e11d48;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s ease;
+        }
+
+        .btn:disabled {
+            background-color: #f3a0b2;
+            cursor: not-allowed;
+        }
+
+        @media screen and (max-width: 500px) {
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .btn {
+                font-size: 0.95rem;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>QR Attendance Scanner</h2>
+        <div id="reader"></div>
+        <div id="result">No QR code scanned yet.</div>
+        <button id="markBtn" class="btn" onclick="markAttendance()" disabled>Mark Attendance</button>
+    </div>
+
+    <script>
+        let html5QrCode;
+        let scannedId = null;
+        let scannerRunning = false;
+
+        const startScanner = () => {
+            if (!scannerRunning) {
+                Html5Qrcode.getCameras().then(devices => {
+                    if (devices && devices.length) {
+                        html5QrCode = new Html5Qrcode("reader");
+                        html5QrCode.start(
+                            { facingMode: "environment" },
+                            {
+                                fps: 10,
+                                qrbox: { width: 250, height: 250 }
+                            },
+                            onScanSuccess,
+                            onScanFailure
+                        );
+                        scannerRunning = true;
+                    } else {
+                        alert("No camera found.");
+                    }
+                }).catch(err => {
+                    alert("Camera access error: " + err.message);
+                });
+            }
+        };
+
+        function onScanSuccess(decodedText) {
+            scannedId = decodedText;
+            document.getElementById("result").textContent = "✅ Scanned: " + scannedId;
+            document.getElementById("markBtn").disabled = false;
+
+            // Optional: stop scanning until user clicks "Mark Attendance"
+            html5QrCode.stop().then(() => {
+                scannerRunning = false;
+            }).catch(err => console.error("Stop failed:", err));
+        }
+
+        function onScanFailure(error) {
+            // Optional: handle scan errors
+        }
+
+        function markAttendance() {
+            if (scannedId) {
+                alert("✅ Attendance marked for: " + scannedId);
+                document.getElementById("result").textContent = "✅ Attendance marked!";
+                document.getElementById("markBtn").disabled = true;
+
+                // Restart scanner after delay
+                setTimeout(() => {
+                    document.getElementById("result").textContent = "Ready for next scan...";
+                    scannedId = null;
+                    html5QrCode.clear();
+                    startScanner();
+                }, 2000);
+            }
+        }
+
+        // Launch scanner on page load
+        startScanner();
+    </script>
+
+</body>
+
+</html>

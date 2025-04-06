@@ -15,17 +15,18 @@
     .sidebar a:hover { background-color: #d61c4e; }
   </style>
 </head>
-<body class="bg-blue-50 min-h-screen">
+<body class="bg-blue-30 min-h-screen">
   <div class="d-flex">
-    <!-- Sidebar -->
-    <aside class="sidebar p-3 text-white w-1/5 hidden md:block">
-      <h2 class="text-2xl font-bold mb-4">Dashboard</h2>
-      <ul class="nav flex-column">
-        <li class="nav-item mb-2"><a class="nav-link" href="/events">Events</a></li>
-        <li class="nav-item mb-2"><a class="nav-link" href="#">Approved</a></li>
-        <li class="nav-item mb-2"><a class="nav-link" href="/approvalstatus">Approval Status</a></li>
-        <li class="nav-item mb-2"><a class="nav-link" href="/new_event">New Event</a></li>
-        <li class="nav-item mb-2"><a class="nav-link" href="#">Certificates</a></li>
+      <div class="sidebar p-3 text-white w-1/5 hidden md:block bg-red-700 min-h-screen" id="sidebar">
+        <h2 class="text-3xl font-bold mb-6 ml-2 pt-4" style="font-family: 'roboto', sans-serif;">Dashboard</h2>
+          <ul class="nav flex-column space-y-2">
+        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block"  href="/events">Events</a></li>
+        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block" href="#">Approved</a></li>
+        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block" href="/approvalstatus">Approval Status</a></li>
+        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block" href="/new_event">New Event</a></li>
+        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block" href="#">Certificates</a></li>
+        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block" href="/venue">Venues</a></li>
+        <li class="nav-item mb-2"><a class="nav-link text-white hover:bg-white hover:text-red-700 transition rounded px-3 py-2 block" href="/attendance">Attendance</a></li>
       </ul>
     </aside>
 
@@ -35,7 +36,9 @@
         <h1 class="text-4xl font-bold text-rose-600">Events</h1>
         <div class="flex gap-2">
           <input type="text" id="eventSearch" placeholder="Search events..." class="form-control"/>
-          <button class="btn btn-secondary" id="toggleTheme">🌓 Theme</button>
+          <button id="toggleTheme" class="px-4 py-2 rounded-full font-semibold shadow-md transition-all duration-300 flex items-center gap-2 bg-red-700 text-white hover:bg-red-800">
+            <span id="themeIcon" class="text-xl">🌞</span> Theme
+          </button>
           <div class="dropdown">
             <button class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
               <i class="bi bi-person-circle"></i> Profile
@@ -44,7 +47,7 @@
               <li><a class="dropdown-item" href="#">View Profile</a></li>
               <li><a class="dropdown-item" href="#">Settings</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+              <li><a class="dropdown-item text-danger" href="/landing">Logout</a></li>
             </ul>
           </div>
         </div>
@@ -123,5 +126,16 @@
       });
     });
   </script>
+  <script>
+    const toggleThemeBtn = document.getElementById('toggleTheme');
+    const themeIcon = document.getElementById('themeIcon');
+  
+    toggleThemeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+  
+      const isDark = document.body.classList.contains('dark-mode');
+      themeIcon.textContent = isDark ? '🌚' : '🌞';
+    });
+</script>
 </body>
 </html>

@@ -594,28 +594,14 @@ app.get('/calendar', (req,res)=>res.render("calendar.ejs"))
 // Route to get certificates for a specific student by email or studentId
 // Import the Certificate model // Adjust path to the correct model
 // global.CertificateModel = eventDB.model("Certificate", require("./models/Certificate").schema);
-app.get('/certificates/:email', async (req, res) => {
-  const { email } = req.params;
-  const User = require('./models/student');  // Adjust the path as needed
-
-  try {
-    const student = await User.findOne({ email })
-      .populate('certificates')
-      .populate('certificates.event');  // Populate event for certificates
-
-    if (!student) {
-      return res.status(404).send('Student not found');
-    }
-
-    res.render('certificates', {
-      student: student,
-      certificates: student.certificates || []  // Ensure certificates is an array (even if empty)
-    });
-  } catch (err) {
-    console.error('Error fetching student certificates:', err);
-    res.status(500).send('Internal Server Error');
-  }
+app.get('/certificates', async (req, res) => {
+ res.render("certificates.ejs");
 });
+
+app.get('/venue', (req,res)=>res.render("venue.ejs"));
+app.get('/attendance', (req,res)=>res.render("attendance.ejs"));
+
+app.get('/studentattendance', (req,res) => res.render("studentattendance.ejs"));
 
 // Start server
 app.listen(port, () => console.log(`✅ Server listening on port ${port}`));
